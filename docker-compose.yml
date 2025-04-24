@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:7.2
+    command: >
+      redis-server --requirepass cop_etset --user poc_teste on >default allcommands allkeys ~* +@all
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:
