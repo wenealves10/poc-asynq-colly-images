@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/hibiken/asynq"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/queues"
+	"github.com/wenealves10/poc-asynq-colly-images/internal/scraper"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/tasks"
 )
 
@@ -28,8 +28,13 @@ func (p *ScraperProductProcessor) ProcessTask(ctx context.Context, task *asynq.T
 	}
 
 	// Simulate a long-running task
-	time.Sleep(10 * time.Second)
 	fmt.Printf("Processing ScraperProduct task with URL: %s\n", payload.ProductURL)
+	scraperMercadoLivre := scraper.NewMercadoLivreScraper("https://www.mercadolivre.com.br")
+	product, err := scraperMercadoLivre.GetProductURL(payload.ProductURL)
+	if err != nil {
+		return fmt.Errorf("failed to get product URL: %v", err)
+	}
+	fmt.Printf("Product details: %+v\n", product)
 
 	//todo: // send image processor task
 	taskImageProcessor, err := tasks.NewImageProcessorTask("123", "https://example.com/image.jpg")
