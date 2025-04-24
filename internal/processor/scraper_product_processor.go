@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
+	"github.com/wenealves10/poc-asynq-colly-images/internal/queues"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/tasks"
 )
 
@@ -37,7 +38,7 @@ func (p *ScraperProductProcessor) ProcessTask(ctx context.Context, task *asynq.T
 	}
 
 	// Enqueue the image processor task
-	if _, err := p.client.Enqueue(taskImageProcessor); err != nil {
+	if _, err := p.client.Enqueue(taskImageProcessor, asynq.Queue(queues.TypeImageProcessorQueue)); err != nil {
 		return fmt.Errorf("failed to enqueue image processor task: %v", err)
 	}
 

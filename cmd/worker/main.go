@@ -7,6 +7,7 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/configs"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/processor"
+	"github.com/wenealves10/poc-asynq-colly-images/internal/queues"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/tasks"
 )
 
@@ -21,11 +22,11 @@ func main() {
 			Password: configs.REDIS_PASSWORD,
 		},
 		asynq.Config{
-			Concurrency: 10,
+			Concurrency: queues.Concurrency,
 			Queues: map[string]int{
-				"critical": 6,
-				"default":  3,
-				"low":      1,
+				queues.TypeScraperProductQueue: queues.ConcurrencyScraperProduct,
+				queues.TypeImageProcessorQueue: queues.ConcurrencyImageProcessor,
+				queues.TypeImageUploaderQueue:  queues.ConcurrencyImageUploader,
 			},
 		},
 	)

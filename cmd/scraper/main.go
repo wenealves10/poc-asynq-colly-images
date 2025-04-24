@@ -6,6 +6,7 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/configs"
+	"github.com/wenealves10/poc-asynq-colly-images/internal/queues"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/tasks"
 )
 
@@ -25,7 +26,7 @@ func main() {
 	}
 
 	// Enqueue the task
-	info, err := client.Enqueue(task)
+	info, err := client.Enqueue(task, asynq.Queue(queues.TypeScraperProductQueue))
 	if err != nil {
 		log.Fatalf("failed to enqueue task: %v", err)
 	}

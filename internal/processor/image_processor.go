@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
+	"github.com/wenealves10/poc-asynq-colly-images/internal/queues"
 	"github.com/wenealves10/poc-asynq-colly-images/internal/tasks"
 )
 
@@ -35,7 +36,7 @@ func (p *ImageProcessor) ProcessTask(ctx context.Context, task *asynq.Task) erro
 		return fmt.Errorf("failed to create image uploader task: %v", err)
 	}
 	// Enqueue the image uploader task
-	if _, err := p.client.Enqueue(taskImageUploader); err != nil {
+	if _, err := p.client.Enqueue(taskImageUploader, asynq.Queue(queues.TypeImageUploaderQueue)); err != nil {
 		return fmt.Errorf("failed to enqueue image uploader task: %v", err)
 	}
 
